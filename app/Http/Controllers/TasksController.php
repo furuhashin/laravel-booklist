@@ -8,14 +8,19 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 //モデルの宣言
-use App\Tasks;
+use App\Task;
 
 class TasksController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     //一覧の表示
     public function index()
     {
-        $tasks = Tasks::all();
+        $tasks = Task::all();
         //task.indexにtasksという名前で$tasksを渡している
         return view('tasks.index', compact('tasks'));
     }
@@ -23,7 +28,7 @@ class TasksController extends Controller
     //タスクの表示
     public function show($id)
     {
-        $tasks = Tasks::findOrFail($id);
+        $tasks = Task::findOrFail($id);
         return view('tasks.show',compact('tasks'));
     }
 
@@ -43,7 +48,7 @@ class TasksController extends Controller
             'published' => 'required|date',
         ]);
 
-        Tasks::create($request->all());
+        Task::create($request->all());
 
         \Session::flash('flash_message', 'Topic successfully added!');
     }
@@ -51,14 +56,14 @@ class TasksController extends Controller
     //タスクの編集
     public function edit($id)
     {
-        $tasks = Tasks::findOrFail($id);
+        $tasks = Task::findOrFail($id);
         return view('tasks.edit',compact('tasks'));
     }
 
     //既存タスクの更新
     public function update($id,Request $request)
     {
-        $tasks = Tasks::findOrFail($id);
+        $tasks = Task::findOrFail($id);
 
         $this->validate($request,[
             'title' => 'required|min:3',
@@ -80,7 +85,7 @@ class TasksController extends Controller
 
         if ($target_id && is_numeric($target_id)) {
 
-            $tasks = Tasks::findOrFail($target_id);
+            $tasks = Task::findOrFail($target_id);
             $tasks->delete();
 
             \Session::flash('flash_message', 'Topic successfully deleted!');

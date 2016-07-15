@@ -27,6 +27,9 @@ class AuthController extends Controller
      *
      * @return void
      */
+
+    protected $redirectTo = '/'; // 追加。登録後やログイン後のリダイレクト先
+
     public function __construct()
     {
         $this->middleware('guest', ['except' => 'getLogout']);

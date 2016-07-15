@@ -12,31 +12,27 @@ class CreateTasksTable extends Migration
      */
     public function up()
     {
-        //taskssテーブルを生成する
+        //tasksテーブルを生成する
         Schema::create('tasks', function(Blueprint $table) {
             $table->increments('id');
             $table->string('title');
-            $table->text('body');
-            $table->date('published');
+            $table->text('body')->nullable();
+            $table->string('status',20);
+            $table->date('deadline')->nullable();
+            $table->tinyInteger('delete_flg')->unsigned()->default(0);
+            $table->integer('create_id')->unsigned();
+            $table->integer('update_id')->unsigned();
+            //created_at,update_date
             $table->timestamps();
             //Add columns for Laravel Stapler
             $table->string('eyecatch_file_name', 256);
             $table->integer('eyecatch_file_size');
             $table->string('eyecatch_content_type', 256);
             $table->timestamp('eyecatch_updated_at');
+        });
 
-            /*
-              JFYI:laravel-stapler用のカラム追加
-              カラム名：eyecatch_file_name => varchar(256)
-              カラム名：eyecatch_file_size => int(11)
-              カラム名：eyecatch_comtent_type => varchar(256)
-              カラム名：eyecatch_updated_at => timestamp
-            */
-
-            /*
-              JFYI:カラムの詳細設定をする場合はこちらを参考にしてみてください
-              http://laravel.com/docs/5.1/migrations#writing-migrations
-            */
+        Schema::table('tasks',function($table){
+           $table->foreign('create_id')->references('id')->on('users');
         });
     }
 
@@ -50,3 +46,4 @@ class CreateTasksTable extends Migration
         Schema::drop('tasks');
     }
 }
+

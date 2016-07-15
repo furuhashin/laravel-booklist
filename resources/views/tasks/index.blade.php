@@ -26,7 +26,7 @@
                 <tr>
                     <td width="100"><img src="{{$tasks->eyecatch->url('thumb')}}"></td>
                     <td><div class="body">{{ str_limit($task->body, 300, $end = '...[If you show more, plese click title.]') }}</div></td>
-                    <td width="100">{{ $task->published }}</td>
+                    <td width="100">{{ $task->deadline }}</td>
                 </tr>
             </table>
         </article>

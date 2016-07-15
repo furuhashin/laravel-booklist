@@ -9,12 +9,12 @@ use Codesleeve\Stapler\ORM\EloquentTrait;
 ;
 
 
-class Tasks extends Model implements StaplerableInterface
+class Task extends Model implements StaplerableInterface
 {
     //Staplerの読み込み
     use EloquentTrait;
 
-    protected $fillable = array('title', 'body', 'published', 'eyecatch');
+    protected $fillable = array('title', 'body', 'deadline', 'eyecatch');
 
     //コンストラクタ
     public function __construct(array $attributes = array()) {

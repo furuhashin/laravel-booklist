@@ -12,6 +12,15 @@
 |
 */
 
+// ログイン画面
+Route::get('auth/login', 'Auth\AuthController@getLogin');
+Route::post('auth/login', 'Auth\AuthController@postLogin');
+Route::get('auth/logout', 'Auth\AuthController@getLogout');
+
+// ユーザー登録画面
+Route::get('auth/register', 'Auth\AuthController@getRegister');
+Route::post('auth/register', 'Auth\AuthController@postRegister');
+
 //タスク一覧表示画面
 Route::get('/', 'TasksController@index');
 

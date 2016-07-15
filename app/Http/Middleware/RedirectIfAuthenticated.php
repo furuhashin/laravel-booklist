@@ -35,7 +35,8 @@ class RedirectIfAuthenticated
     public function handle($request, Closure $next)
     {
         if ($this->auth->check()) {
-            return redirect('/home');
+            //認証後にログイン画面に行こうとしてもindexにリダイレクトされる
+            return redirect('/');
         }
 
         return $next($request);

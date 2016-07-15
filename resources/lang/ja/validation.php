@@ -19,6 +19,6 @@ return [
     'attributes' => [
         'title' => 'タイトル',
         'body' => '本文',
-        'published' => '公開日',
+        'deadline' => '期限',
     ],
 ];
