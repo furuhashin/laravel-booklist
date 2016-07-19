@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 class CreateTasksTable extends Migration
 {
     /**
-     * Run the migrations.
+     * マイグレーション実行
      *
      * @return void
      */
@@ -37,7 +37,7 @@ class CreateTasksTable extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * マイグレーションを戻す
      *
      * @return void
      */
@@ -46,4 +46,3 @@ class CreateTasksTable extends Migration
         Schema::drop('tasks');
     }
 }
-

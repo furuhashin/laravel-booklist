@@ -6,7 +6,10 @@
 
     <div class="form-group">
         {!! Form::label('title','メールアドレス:') !!}
-        {!! Form::text('email','',['value' => "{{ old('email') }}",'class' => 'form-control','placeholder' => "ユーザーIDを入力してください"]) !!}
+        {!! Form::text('email','',['value' => "{{ old('email') }}",
+        'class' => 'form-control',
+        'placeholder' => "ユーザーIDを入力してください"])
+         !!}
         @if ($errors->has('email'))
             <div class="errors"><p>{!! $errors->first('email') !!}</p></div>
         @endif

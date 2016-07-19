@@ -31,7 +31,7 @@
             {!! Form::file('eyecatch', null, ['class' => 'form-control']) !!}
         </div>
         <div class="form-group">
-            {!! Form::submit('Add Topic', ['class' => 'btn btn-primary form-control']) !!}
+            {!! Form::submit('確認する', ['class' => 'btn btn-primary']) !!}
         </div>
     {!! Form::close() !!}
 @endsection
