@@ -3,18 +3,16 @@
 namespace App;
 
 use Codesleeve\Stapler\ORM\StaplerableInterface;
+use Codesleeve\Stapler\ORM\EloquentTrait;
 
 use Illuminate\Database\Eloquent\Model;
-use Codesleeve\Stapler\ORM\EloquentTrait;
-;
-
 
 class Task extends Model implements StaplerableInterface
 {
     //Staplerの読み込み
     use EloquentTrait;
 
-    protected $fillable = array('title', 'body', 'deadline', 'eyecatch');
+    protected $fillable = array('title', 'body', 'status', 'deadline', 'create_id', 'eyecatch');
 
     //コンストラクタ
     public function __construct(array $attributes = array()) {

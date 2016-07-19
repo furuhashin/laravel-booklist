@@ -28,8 +28,8 @@ class TasksController extends Controller
     //タスクの表示
     public function show($id)
     {
-        $tasks = Task::findOrFail($id);
-        return view('tasks.show',compact('tasks'));
+        $task = Task::findOrFail($id);
+        return view('tasks.show',compact('task'));
     }
 
     //タスクの追加画面の表示
@@ -45,34 +45,35 @@ class TasksController extends Controller
             'title' => 'required|min:3',
             'body' => 'required',
             'eyecatch' => 'image|max:2000',
-            'published' => 'required|date',
+            'deadline' => 'required|date',
         ]);
 
         Task::create($request->all());
 
         \Session::flash('flash_message', 'Topic successfully added!');
+        return redirect('/');
     }
 
     //タスクの編集
     public function edit($id)
     {
-        $tasks = Task::findOrFail($id);
-        return view('tasks.edit',compact('tasks'));
+        $task = Task::findOrFail($id);
+        return view('tasks.edit',compact('task'));
     }
 
     //既存タスクの更新
     public function update($id,Request $request)
     {
-        $tasks = Task::findOrFail($id);
+        $task = Task::findOrFail($id);
 
         $this->validate($request,[
             'title' => 'required|min:3',
             'body' => 'required',
             'eyecatch' => 'image|max:2000',
-            'published' => 'required|date',
+            'deadline' => 'required|date',
         ]);
 
-        $tasks->fill($request->all()->save());
+        $task->fill($request->all())->save();
 
         \Session::flash('flash_message', 'Topic successfully edited!');
         return redirect('/');

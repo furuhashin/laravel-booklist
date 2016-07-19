@@ -24,7 +24,11 @@
         </div>
         <div class="form-group">
             {!! Form::label('deadline', '期限:') !!}
-            {!! Form::input('date', 'published', date('Y-m-d'), ['class' => 'form-control']) !!}
+            {!! Form::input('date', 'deadline', date('Y-m-d'), ['class' => 'form-control']) !!}
+        </div>
+        <div class="form-group">
+            {!! Form::label('status','ステータス:') !!}
+            {!! Form::select('status',['未処理' => '未処理','仕掛中' => '仕掛中','完了' => '完了'],'', ['class' => 'form-control']) !!}
         </div>
         <div class="form-group">
             {!! Form::label('eyecatch','画像:') !!}
@@ -33,5 +37,9 @@
         <div class="form-group">
             {!! Form::submit('確認する', ['class' => 'btn btn-primary']) !!}
         </div>
+        <div>
+            {!! Form::hidden('create_id', Auth::user()->id) !!}
+        </div>
+
     {!! Form::close() !!}
 @endsection
