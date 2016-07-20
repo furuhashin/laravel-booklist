@@ -13,7 +13,7 @@
         </div>
     @endif
 
-    {!! Form::open(['url' =>  'tasks/create', 'files' => true]) !!}
+    {!! Form::open(['url' =>  'tasks', 'files' => true]) !!}
         <div class="form-group">
             {!! Form::label('title','タスク名:') !!}
             {!! Form::text('title',null,['class' => 'form-control']) !!}
@@ -35,7 +35,10 @@
             {!! Form::file('eyecatch', null, ['class' => 'form-control']) !!}
         </div>
         <div class="form-group">
-            {!! Form::submit('確認する', ['class' => 'btn btn-primary']) !!}
+            <div class="pull-left">
+            {!! Form::submit('追加する', ['class' => 'btn btn-primary']) !!}
+            {!! link_to('/', '一覧へ戻る', ['class' => 'btn btn-info']) !!}
+            </div>
         </div>
         <div>
             {!! Form::hidden('create_id', Auth::user()->id) !!}

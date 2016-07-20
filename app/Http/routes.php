@@ -24,9 +24,12 @@ Route::post('auth/register', 'Auth\AuthController@postRegister');
 //タスク一覧表示画面
 Route::get('/', 'TasksController@index');
 
+//タスク削除確認画面
+Route::get('/tasks/confirm/{id}', 'TasksController@confirm');
+
 //タスクの新規追加画面
-Route::get('/tasks/add', 'TasksController@add');
-Route::post('/tasks/create','TasksController@create');
+Route::get('/tasks/create', 'TasksController@create');
+Route::post('/tasks','TasksController@store');
 
 //任意IDのタスク表示
 Route::get('/tasks/{id}','TasksController@show');

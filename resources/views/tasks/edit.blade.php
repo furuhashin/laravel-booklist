@@ -31,11 +31,19 @@
         {!! Form::select('status',['未処理' => '未処理','仕掛中' => '仕掛中','完了' => '完了'],$task->status,['class' => 'form-control']) !!}
     </div>
     <div class="form-group">
-        {!! Form::label('eyecatch','画像:') !!}
-        {!! Form::file('eyecatch','',$task->eyecatch->url('thumb'),['class' => 'form-control']) !!}
+        {!! Form::label('eyecatch','新規画像:') !!}
+        {!! Form::file('eyecatch',['class' => 'form-control']) !!}
     </div>
     <div class="form-group">
-        {!! Form::submit('確認する', ['class' => 'btn btn-primary']) !!}
+    <b>現在の画像</b>
+    </div>
+    <img src="{{ $task->eyecatch->url('large') }}">
+
+    <div class="form-group">
+        <div class="pull-left">
+        {!! Form::submit('実行する', ['class' => 'btn btn-primary']) !!}
+            {!! link_to('/', '一覧へ戻る', ['class' => 'btn btn-info']) !!}
+        </div>
     </div>
     <div>
         {!! Form::hidden('create_id', Auth::user()->id) !!}
