@@ -32,4 +32,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      * @var array
      */
     protected $hidden = ['password', 'remember_token'];
+
+    /*
+     * タスクリストのタスクを取得
+     */
+    public function tasks()
+    {
+        return $this->hasMany('App\Task');
+    }
 }

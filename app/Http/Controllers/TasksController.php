@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-use App\Http\Controllers\Controller;
 
 //モデルの宣言
+use App\User;
 use App\Task;
+use App\Comment;
+
 
 class TasksController extends Controller
 {
@@ -21,7 +23,7 @@ class TasksController extends Controller
     public function index()
     {
 
-        $tasks = Task::where('delete_flg',0)->paginate(5);
+        $tasks = Task::paginate(5);
         //task.indexにtasksという名前で$tasksを渡している
         return view('tasks.index', compact('tasks'));
     }
@@ -30,7 +32,8 @@ class TasksController extends Controller
     public function show($id)
     {
         $task = Task::findOrFail($id);
-        return view('tasks.show',compact('task'));
+        $comments = Task::find($id)->comments()->join('users','comments.update_id','=','users.id')->get();
+        return view('tasks.show', compact('task'),compact('comments'));
     }
 
     //確認画面の表示
@@ -92,13 +95,11 @@ class TasksController extends Controller
     public function delete(Request $request)
     {
         $target_id = $request->id;
-        $delete_flg = 1;
 
         if ($target_id && is_numeric($target_id)) {
 
             $tasks = Task::findOrFail($target_id);
-            $tasks->delete_flg = $delete_flg;
-            $tasks->save();
+            $tasks->delete();
 
             \Session::flash('flash_message', 'タスクの削除が完了しました!');
         }else{

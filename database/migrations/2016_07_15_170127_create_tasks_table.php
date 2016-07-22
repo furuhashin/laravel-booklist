@@ -19,7 +19,6 @@ class CreateTasksTable extends Migration
             $table->text('body')->nullable();
             $table->string('status',20);
             $table->date('deadline')->nullable();
-            $table->tinyInteger('delete_flg')->unsigned()->default(0);
             $table->integer('create_id')->unsigned();
             $table->integer('update_id')->unsigned();
             //created_at,update_date
@@ -31,9 +30,14 @@ class CreateTasksTable extends Migration
             $table->timestamp('eyecatch_updated_at');
         });
 
+        Schema::table('tasks', function ($table) {
+            $table->softDeletes();
+        });
+
         Schema::table('tasks',function($table){
            $table->foreign('create_id')->references('id')->on('users');
         });
+
     }
 
     /**

@@ -30,6 +30,7 @@
 
     <div>
         {!! Form::submit('ログイン', ['class' => 'btn btn-primary']) !!}
+        {!! link_to('auth/register','新規登録はこちら',['class' => 'btn btn-info']) !!}
     </div>
     {!! Form::close() !!}
 @endsection

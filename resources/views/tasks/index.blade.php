@@ -1,9 +1,14 @@
 @extends('layouts.app')
     @section('content')
     <h1>
-        タスク一覧    {!! link_to('tasks/create','新規作成',['class' => 'btn btn-primary']) !!}
-
+        タスク一覧
+        {!! link_to('tasks/create','新規作成',['class' => 'btn btn-primary']) !!}
+        <div class="pull-right">
+            {!! link_to('auth/logout','ログアウト',['class' => 'btn btn-danger']) !!}
+        </div>
     </h1>
+
+
     @if(Session::has('flash_message'))
         <div class="alert alert-success">
             {{ Session::get('flash_message') }}

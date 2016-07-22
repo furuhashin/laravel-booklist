@@ -4,6 +4,7 @@ namespace App;
 
 use Codesleeve\Stapler\ORM\StaplerableInterface;
 use Codesleeve\Stapler\ORM\EloquentTrait;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,8 +12,16 @@ class Task extends Model implements StaplerableInterface
 {
     //Staplerの読み込み
     use EloquentTrait;
+    use SoftDeletes;
 
     protected $fillable = array('title', 'body', 'status', 'deadline', 'create_id', 'eyecatch');
+
+    /**
+     * 日付へキャストする属性
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
 
     //コンストラクタ
     public function __construct(array $attributes = array()) {
@@ -32,4 +41,22 @@ class Task extends Model implements StaplerableInterface
         ]);
         parent::__construct($attributes);
     }
+
+    /**
+     * タスクリストのコメントを取得
+     */
+    public function comments()
+    {
+        return $this->hasMany('App\Comment');
+    }
+
+    /*
+     * このタスクを所有するユーザを取得
+     */
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
+
+
 }
