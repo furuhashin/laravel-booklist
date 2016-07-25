@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('content')
+
     <article>
         <h1>以下のタスクを削除します</h1>
         <hr>
@@ -16,8 +17,7 @@
             <hr>
             <div style="margin-bottom: 75px;">
                 <div class="pull-left" style="padding-right: 5px ">
-                    {!! Form::open(['url' => 'tasks/delete']) !!}
-                    {!! Form::hidden('id', $task->id, ['class' => 'form-control']) !!}
+                    {!! Form::open(['url' => 'tasks/delete/'.$task->id]) !!}
                     {!! Form::submit('削除する', ['class' => 'btn btn-danger']) !!}
                     {!! Form::close() !!}
                 </div>

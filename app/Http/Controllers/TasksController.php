@@ -7,9 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 
 //モデルの宣言
-use App\User;
 use App\Task;
-use App\Comment;
 
 
 class TasksController extends Controller
@@ -32,7 +30,8 @@ class TasksController extends Controller
     public function show($id)
     {
         $task = Task::findOrFail($id);
-        $comments = Task::find($id)->comments()->join('users','comments.update_id','=','users.id')->get();
+        $comments = Task::find($id)->comments()->join('users','comments.create_id','=','users.id')
+            ->select('comments.id as id','comments.create_id as create_id','comments.updated_at as updated_at','body','name')->orderby('comments.id','asc')->get();
         return view('tasks.show', compact('task'),compact('comments'));
     }
 
@@ -92,13 +91,11 @@ class TasksController extends Controller
     }
 
     //既存タスクの削除
-    public function delete(Request $request)
+        public function delete($id)
     {
-        $target_id = $request->id;
+        if ($id && is_numeric($id)) {
 
-        if ($target_id && is_numeric($target_id)) {
-
-            $tasks = Task::findOrFail($target_id);
+            $tasks = Task::findOrFail($id);
             $tasks->delete();
 
             \Session::flash('flash_message', 'タスクの削除が完了しました!');

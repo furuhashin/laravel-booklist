@@ -24,9 +24,6 @@ Route::post('auth/register', 'Auth\AuthController@postRegister');
 //タスク一覧表示画面
 Route::get('/', 'TasksController@index');
 
-//コメントの追加
-Route::post('/comments','CommentsController@store');
-
 //タスク削除確認画面
 Route::get('/tasks/confirm/{id}', 'TasksController@confirm');
 
@@ -42,7 +39,17 @@ Route::get('/tasks/edit/{id}','TasksController@edit');
 Route::post('/tasks/update/{id}','TasksController@update');
 
 //任意IDのタスク削除
-Route::post('/tasks/delete','TasksController@delete');
+Route::post('/tasks/delete/{id}','TasksController@delete');
+
+//コメントの追加
+Route::post('/comments','CommentsController@store');
+
+//任意IDのコメント編集
+Route::get('/comments/edit/{id}','CommentsController@edit');
+Route::post('/comments/update/{id}','CommentsController@update');
+
+//任意IDのコメント削除
+Route::post('/comments/delete/{id}','CommentsController@delete');
 
 
 

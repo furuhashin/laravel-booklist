@@ -38,7 +38,7 @@
     <b>現在の画像</b>
     </div>
     <img src="{{ $task->eyecatch->url('large') }}">
-
+    <hr>
     <div class="form-group">
         <div class="pull-left">
         {!! Form::submit('実行する', ['class' => 'btn btn-primary']) !!}

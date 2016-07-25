@@ -6,7 +6,6 @@ use App\Comment;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-use App\Http\Controllers\Controller;
 
 class CommentsController extends Controller
 {
@@ -71,8 +70,8 @@ class CommentsController extends Controller
      */
     public function edit($id)
     {
-        //
-    }
+        $comment = Comment::findOrFail($id);
+        return view('comments.edit',compact('comment'));    }
 
     /**
      * Update the specified resource in storage.
@@ -83,17 +82,38 @@ class CommentsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $comment = Comment::findOrFail($id);
+
+        $this->validate($request,[
+            'body' => 'required',
+        ]);
+
+        $comment->fill($request->all())->save();
+
+        \Session::flash('flash_message', 'タスクの編集に成功しました!');
+        return redirect('/');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function delete($id)
     {
-        //
+        if ($id && is_numeric($id)) {
+
+            $comments = Comment::findOrFail($id);
+            $comments->delete();
+
+            \Session::flash('flash_message', 'コメントの削除が完了しました!');
+        }else{
+            \Session::flash('flash_message', '何か問題が生じ、コメントの削除が失敗しました! ');
+        }
+
+        return redirect('/');
+
+
     }
 }

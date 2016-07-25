@@ -15,14 +15,7 @@ class Task extends Model implements StaplerableInterface
     use SoftDeletes;
 
     protected $fillable = array('title', 'body', 'status', 'deadline', 'create_id', 'eyecatch');
-
-    /**
-     * 日付へキャストする属性
-     *
-     * @var array
-     */
-    protected $dates = ['deleted_at'];
-
+    
     //コンストラクタ
     public function __construct(array $attributes = array()) {
 
@@ -40,6 +33,36 @@ class Task extends Model implements StaplerableInterface
             'url' => '/uploads/tasks/:id/:style/:filename'
         ]);
         parent::__construct($attributes);
+    }
+
+    /**
+     * 日付へキャストする属性
+     *
+     * @var array
+     */
+    //ソフトデリート用プロパティ
+    protected $dates = ['deleted_at'];
+
+    //親レコードを削除、復活させた場合に子レコードにもそれを適用
+    public static function boot()
+    {
+        parent::boot();
+        // taskレコードを削除した際のイベントを登録
+        static::deleted(function ($task) {
+            // 関連しているコメントをループ
+            //コメントはこのクラスのcommentsメソッドで取得したコメント
+            foreach($task->comments as $comment) {
+                // 関連している記事を論理削除
+                $comment->delete();
+            }
+        });
+        
+        // 論理削除したUserレコードを復活した際のイベントを登録
+        static::restored(function ($task) {
+            foreach($task->getTrashedComments() as $comment) {
+                $comment->restore();
+            }
+        });
     }
 
     /**

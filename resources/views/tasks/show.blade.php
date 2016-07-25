@@ -1,4 +1,16 @@
 @extends('layouts.app')
+@section('script')
+    $(function(){
+    $(".btn-danger").click(function(){
+    if(confirm("本当に削除しますか？")){
+    //そのままsubmit（削除）
+    }else{
+    //cancel
+    return false;
+    }
+    });
+    });
+@endsection
 @section('content')
     <article>
         <h1>タスク詳細</h1>
@@ -21,9 +33,31 @@
 
             <h3>コメント一覧</h3>
             <hr>
+            <?php $i = 1;?>
+
             @foreach($comments as $comment)
-                <h4>{{ $comment->id }}</h4>
-                <p>{{ $comment->body }}</p><br />
+                <table class="table table-bordered">
+                    <tr class="info">
+                        <td>
+                            ID: {{$i}} 名前: {{ $comment->name }}　投稿日時：{{ $comment->updated_at }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ $comment->body  }}
+                            @if($comment->create_id == Auth::user()->id)
+                            <div class="pull-right" >
+                            <a href="{{url('comments/edit',$comment->id)}}" class="btn btn-primary">編集</a>
+                            <div class="pull-right" >
+                            {!! Form::open(['url' => 'comments/delete/'.$comment->id]) !!}
+                            {!! Form::submit('削除する', ['class' => 'btn btn-danger']) !!}
+                            {!! Form::close() !!}
+                                @endif
+                            </div>
+                        </div>
+                        </td>
+                    </tr>
+                </table>
+                <?php $i++ ;?>
             @endforeach
             {!! Form::open(['action' => 'CommentsController@store']) !!}
             <div class="form-group">
