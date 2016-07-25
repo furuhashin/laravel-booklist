@@ -16,14 +16,14 @@ class Comment extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
-    protected $fillable = array('body', 'task_id', 'create_id', 'eyecatch');
+    protected $fillable = array('body', 'book_id', 'create_id', 'eyecatch');
 
     /*
      * このコメントを所有するタスクを取得
      */
-    public function task()
+    public function book()
     {
-        return $this->belongsTo('App\Task');
+        return $this->belongsTo('App\Book');
     }
 
     /*

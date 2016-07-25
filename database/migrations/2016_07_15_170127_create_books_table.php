@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTasksTable extends Migration
+class CreateBooksTable extends Migration
 {
     /**
      * マイグレーション実行
@@ -12,14 +12,15 @@ class CreateTasksTable extends Migration
      */
     public function up()
     {
-        //tasksテーブルを生成する
-        Schema::create('tasks', function(Blueprint $table) {
+        //booksテーブルを生成する
+        Schema::create('books', function(Blueprint $table) {
             $table->increments('id');
             $table->string('title');
             $table->text('body')->nullable();
             $table->string('status',20);
             $table->date('deadline')->nullable();
             $table->integer('create_id')->unsigned();
+            $table->foreign('create_id')->references('id')->on('users');
             $table->integer('update_id')->unsigned();
             //created_at,update_date
             $table->timestamps();
@@ -30,14 +31,10 @@ class CreateTasksTable extends Migration
             $table->timestamp('eyecatch_updated_at');
         });
 
-        Schema::table('tasks', function ($table) {
+        Schema::table('books', function ($table) {
             $table->softDeletes();
         });
-
-        Schema::table('tasks',function($table){
-           $table->foreign('create_id')->references('id')->on('users');
-        });
-
+        
     }
 
     /**
@@ -47,6 +44,6 @@ class CreateTasksTable extends Migration
      */
     public function down()
     {
-        Schema::drop('tasks');
+        Schema::drop('books');
     }
 }

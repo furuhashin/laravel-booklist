@@ -48,7 +48,7 @@ class CommentsController extends Controller
         Comment::create($request->all());
 
         \Session::flash('flash_message', 'コメントの追加に成功しました!');
-        return redirect("/tasks/$request->task_id");
+        return redirect("/books/$request->book_id");
     }
 
     /**
@@ -90,7 +90,7 @@ class CommentsController extends Controller
 
         $comment->fill($request->all())->save();
 
-        \Session::flash('flash_message', 'タスクの編集に成功しました!');
+        \Session::flash('flash_message', '本情報の編集に成功しました!');
         return redirect('/');
     }
 

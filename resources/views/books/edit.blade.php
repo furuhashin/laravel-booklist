@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <h1>タスク編集</h1>
+    <h1>書籍情報の編集</h1>
     <hr>
 
     @if($errors->any())
@@ -13,22 +13,22 @@
         </div>
     @endif
 
-    {!! Form::open(['url' =>  "tasks/update/$task->id", 'files' => true]) !!}
+    {!! Form::open(['url' =>  "books/update/$book->id", 'files' => true]) !!}
     <div class="form-group">
-        {!! Form::label('title','タスク名:') !!}
-        {!! Form::text('title',$task->title,['class' => 'form-control']) !!}
+        {!! Form::label('title','タイトル:') !!}
+        {!! Form::text('title',$book->title,['class' => 'form-control']) !!}
     </div>
     <div class="form-group">
-        {!! Form::label('body', 'タスク詳細:') !!}
-        {!! Form::textarea('body',$task->body, ['class' => 'form-control']) !!}
+        {!! Form::label('body', '書籍詳細:') !!}
+        {!! Form::textarea('body',$book->body, ['class' => 'form-control']) !!}
     </div>
     <div class="form-group">
         {!! Form::label('deadline', '期限:') !!}
-        {!! Form::input('date', 'deadline', $task->deadline,['class' => 'form-control']) !!}
+        {!! Form::input('date', 'deadline', $book->deadline,['class' => 'form-control']) !!}
     </div>
     <div class="form-group">
         {!! Form::label('status','ステータス:') !!}
-        {!! Form::select('status',['未処理' => '未処理','仕掛中' => '仕掛中','完了' => '完了'],$task->status,['class' => 'form-control']) !!}
+        {!! Form::select('status',['未処理' => '未処理','仕掛中' => '仕掛中','完了' => '完了'],$book->status,['class' => 'form-control']) !!}
     </div>
     <div class="form-group">
         {!! Form::label('eyecatch','新規画像:') !!}
@@ -37,7 +37,7 @@
     <div class="form-group">
     <b>現在の画像</b>
     </div>
-    <img src="{{ $task->eyecatch->url('large') }}">
+    <img src="{{ $book->eyecatch->url('large') }}">
     <hr>
     <div class="form-group">
         <div class="pull-left">

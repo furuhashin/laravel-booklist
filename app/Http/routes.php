@@ -21,25 +21,25 @@ Route::get('auth/logout', 'Auth\AuthController@getLogout');
 Route::get('auth/register', 'Auth\AuthController@getRegister');
 Route::post('auth/register', 'Auth\AuthController@postRegister');
 
-//タスク一覧表示画面
-Route::get('/', 'TasksController@index');
+//本情報一覧表示画面
+Route::get('/', 'BooksController@index');
 
-//タスク削除確認画面
-Route::get('/tasks/confirm/{id}', 'TasksController@confirm');
+//本情報削除確認画面
+Route::get('/books/confirm/{id}', 'BooksController@confirm');
 
-//タスクの新規追加画面
-Route::get('/tasks/create', 'TasksController@create');
-Route::post('/tasks','TasksController@store');
+//本情報の新規追加画面
+Route::get('/books/create', 'BooksController@create');
+Route::post('/books','BooksController@store');
 
-//任意IDのタスク表示
-Route::get('/tasks/{id}','TasksController@show');
+//任意IDの本情報表示
+Route::get('/books/{id}','BooksController@show');
 
-//任意IDのタスク編集
-Route::get('/tasks/edit/{id}','TasksController@edit');
-Route::post('/tasks/update/{id}','TasksController@update');
+//任意IDの本情報編集
+Route::get('/books/edit/{id}','BooksController@edit');
+Route::post('/books/update/{id}','BooksController@update');
 
-//任意IDのタスク削除
-Route::post('/tasks/delete/{id}','TasksController@delete');
+//任意IDの本情報削除
+Route::post('/books/delete/{id}','BooksController@delete');
 
 //コメントの追加
 Route::post('/comments','CommentsController@store');

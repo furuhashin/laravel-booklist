@@ -10,7 +10,7 @@
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
         <div class="navbar-header">
-            <a class="navbar-brand" href="/">Nob Tasks</a>
+            <a class="navbar-brand" href="/">Nob Books</a>
         </div>
     </div>
 </div>
@@ -25,7 +25,7 @@
 <hr>
 <footer class="footer">
     <div class="container">
-        <p>Copyright &copy; 2016 Furuhashi All Rights Reserverd.</p>
+        <p>Copyright &copy; 2016 Nobukatsu Furuhashi All Rights Reserverd.</p>
     </div>
 </footer>
 </body>

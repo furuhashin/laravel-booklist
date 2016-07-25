@@ -34,10 +34,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     protected $hidden = ['password', 'remember_token'];
 
     /*
-     * タスクリストのタスクを取得
+     * ブックリストの本情報を取得
      */
-    public function tasks()
+    public function books()
     {
-        return $this->hasMany('App\Task');
+        return $this->hasMany('App\Book');
     }
 }

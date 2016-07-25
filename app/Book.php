@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Task extends Model implements StaplerableInterface
+class Book extends Model implements StaplerableInterface
 {
     //Staplerの読み込み
     use EloquentTrait;
@@ -30,7 +30,7 @@ class Task extends Model implements StaplerableInterface
             ],
 
             //格納ディレクトリ(public配下からのパス)
-            'url' => '/uploads/tasks/:id/:style/:filename'
+            'url' => '/uploads/books/:id/:style/:filename'
         ]);
         parent::__construct($attributes);
     }
@@ -47,19 +47,20 @@ class Task extends Model implements StaplerableInterface
     public static function boot()
     {
         parent::boot();
-        // taskレコードを削除した際のイベントを登録
-        static::deleted(function ($task) {
+        static::bootStapler();
+        // bookレコードを削除した際のイベントを登録
+        static::deleted(function ($book) {
             // 関連しているコメントをループ
             //コメントはこのクラスのcommentsメソッドで取得したコメント
-            foreach($task->comments as $comment) {
+            foreach($book->comments as $comment) {
                 // 関連している記事を論理削除
                 $comment->delete();
             }
         });
         
         // 論理削除したUserレコードを復活した際のイベントを登録
-        static::restored(function ($task) {
-            foreach($task->getTrashedComments() as $comment) {
+        static::restored(function ($book) {
+            foreach($book->getTrashedComments() as $comment) {
                 $comment->restore();
             }
         });

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <h1>タスク作成</h1>
+    <h1>書籍情報の作成</h1>
     <hr>
 
     @if($errors->any())
@@ -13,13 +13,13 @@
         </div>
     @endif
 
-    {!! Form::open(['url' =>  'tasks', 'files' => true]) !!}
+    {!! Form::open(['url' =>  'books', 'files' => true]) !!}
         <div class="form-group">
-            {!! Form::label('title','タスク名:') !!}
+            {!! Form::label('title','タイトル:') !!}
             {!! Form::text('title',null,['class' => 'form-control']) !!}
         </div>
         <div class="form-group">
-            {!! Form::label('body', 'タスク詳細:') !!}
+            {!! Form::label('body', '書籍詳細:') !!}
             {!! Form::textarea('body', null, ['class' => 'form-control']) !!}
         </div>
         <div class="form-group">
