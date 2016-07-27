@@ -54,12 +54,12 @@
                     <tr>
                         <td>{{ $comment->body  }}
                             @if($comment->create_id == Auth::user()->id)
-                            <div class="pull-right" >
-                            <a href="{{url('comments/edit',$comment->id)}}" class="btn btn-primary">編集</a>
-                            <div class="pull-right" >
-                            {!! Form::open(['url' => 'comments/delete/'.$comment->id]) !!}
-                            {!! Form::submit('削除する', ['class' => 'btn btn-danger']) !!}
-                            {!! Form::close() !!}
+                                <div class="pull-right" >
+                                <a href="{{url('comments/edit',$comment->id)}}" class="btn btn-primary">編集</a>
+                                <div class="pull-right" >
+                                {!! Form::open(['url' => 'comments/delete/'.$comment->id]) !!}
+                                {!! Form::submit('削除する', ['class' => 'btn btn-danger']) !!}
+                                {!! Form::close() !!}
                                 @endif
                             </div>
                         </div>

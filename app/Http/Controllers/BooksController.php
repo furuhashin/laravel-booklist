@@ -34,7 +34,7 @@ class booksController extends Controller
         //usersテーブルのidカラム名とbooksテーブルのidカラム名が重複しているためselectを使用
         //leftjoinするとアイキャッチが消えるため指定
         $book = Book::leftjoin('users','books.borrow_id','=','users.id')
-            ->select('books.id as id','title','body','status','name','eyecatch_file_name')->findOrFail($id);
+            ->select('books.id as id','title','body','status','deadline','eyecatch_file_name','name')->findOrFail($id);
 
         //usersテーブルのidカラム名とcommentsテーブルのidカラム名が重複しているためselectを使用
         $comments = Book::find($id)->comments()->join('users','comments.create_id','=','users.id')
