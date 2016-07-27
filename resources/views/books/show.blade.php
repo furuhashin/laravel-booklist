@@ -21,18 +21,27 @@
             </div>
         @endif
         <section style="padding-bottom: 50px;">
-            <p class="lead">タイトル： {{ $book->title }}</p>
-            <img src="{{ $book->eyecatch->url('medium') }}">
+            <table>
+                <tr>
+                    <td>
+                    <img src="{{ $book->eyecatch->url('medium') }}">
+                    </td>
+                    <td style="padding-left: 30px">
+                    <p class="lead">タイトル： {{ $book->title }}</p>
+                    <p class="lead">ステータス：{{ $book->status }}</p>
+                    <p class="lead">借用者：{{ $book->name }}</p>
+                    <p class="lead">貸出期限：{{ $book->deadline }}</p>
+                    </td>
+                </tr>
+            </table>
+            <h3>詳細</h3>
             <hr>
-            <p class="lead">詳細： {{ $book->body }}</p>
-            <hr>
-            <p class="lead">ステータス：{{ $book->status }}</p>
+                <p class="lead">{{ $book->body }}</p>
 
-            <p class="lead">期限：{{ $book->deadline }}</p>
             <hr>
-
             <h3>コメント一覧</h3>
             <hr>
+            {{--コメント欄に付くコメントカウント用--}}
             <?php $i = 1;?>
 
             @foreach($comments as $comment)

@@ -19,16 +19,20 @@
         {!! Form::text('title',$book->title,['class' => 'form-control']) !!}
     </div>
     <div class="form-group">
+        {!! Form::label('author','著者:') !!}
+        {!! Form::text('author',$book->title,['class' => 'form-control']) !!}
+    </div>
+    <div class="form-group">
         {!! Form::label('body', '書籍詳細:') !!}
         {!! Form::textarea('body',$book->body, ['class' => 'form-control']) !!}
     </div>
     <div class="form-group">
-        {!! Form::label('deadline', '期限:') !!}
+        {!! Form::label('deadline', '貸出期限:') !!}
         {!! Form::input('date', 'deadline', $book->deadline,['class' => 'form-control']) !!}
     </div>
     <div class="form-group">
         {!! Form::label('status','ステータス:') !!}
-        {!! Form::select('status',['未処理' => '未処理','仕掛中' => '仕掛中','完了' => '完了'],$book->status,['class' => 'form-control']) !!}
+        {!! Form::select('status',['借りれます' => '借りれます','貸出中' => '貸出中','予約中' => '予約中'],$book->status,['class' => 'form-control']) !!}
     </div>
     <div class="form-group">
         {!! Form::label('eyecatch','新規画像:') !!}
@@ -47,6 +51,8 @@
     </div>
     <div>
         {!! Form::hidden('create_id', Auth::user()->id) !!}
+        {!! Form::hidden('update_id', Auth::user()->id) !!}
+
     </div>
 
     {!! Form::close() !!}

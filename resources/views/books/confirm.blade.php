@@ -13,7 +13,7 @@
             <hr>
             <p class="lead">ステータス：{{ $book->status }}</p>
             <hr>
-            <p class="lead">期限：{{ $book->deadline }}</p>
+            <p class="lead">貸出期限：{{ $book->deadline }}</p>
             <hr>
             <div style="margin-bottom: 75px;">
                 <div class="pull-left" style="padding-right: 5px ">

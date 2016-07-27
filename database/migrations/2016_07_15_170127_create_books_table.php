@@ -19,9 +19,12 @@ class CreateBooksTable extends Migration
             $table->text('body')->nullable();
             $table->string('status',20);
             $table->date('deadline')->nullable();
+            $table->integer('borrow_id')->unsigned();
             $table->integer('create_id')->unsigned();
             $table->foreign('create_id')->references('id')->on('users');
             $table->integer('update_id')->unsigned();
+            $table->foreign('update_id')->references('id')->on('users');
+
             //created_at,update_date
             $table->timestamps();
             //Add columns for Laravel Stapler

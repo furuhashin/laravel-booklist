@@ -20,8 +20,10 @@ class booksController extends Controller
     //一覧の表示
     public function index()
     {
-
-        $books = Book::paginate(5);
+        //usersテーブルのidカラム名とbooksテーブルのidカラム名が重複しているためselectを使用
+        //leftjoinするとアイキャッチが消えるため指定
+        $books = Book::leftjoin('users','books.borrow_id','=','users.id')
+            ->select('books.id as id','title','body','status','deadline','borrow_id','create_id','update_id','eyecatch_file_name','name')->paginate(5);
         //book.indexにbooksという名前で$booksを渡している
         return view('books.index', compact('books'));
     }
@@ -29,7 +31,12 @@ class booksController extends Controller
     //書籍情報の表示
     public function show($id)
     {
-        $book = Book::findOrFail($id);
+        //usersテーブルのidカラム名とbooksテーブルのidカラム名が重複しているためselectを使用
+        //leftjoinするとアイキャッチが消えるため指定
+        $book = Book::leftjoin('users','books.borrow_id','=','users.id')
+            ->select('books.id as id','title','body','status','name','eyecatch_file_name')->findOrFail($id);
+
+        //usersテーブルのidカラム名とcommentsテーブルのidカラム名が重複しているためselectを使用
         $comments = Book::find($id)->comments()->join('users','comments.create_id','=','users.id')
             ->select('comments.id as id','comments.create_id as create_id','comments.updated_at as updated_at','body','name')->orderby('comments.id','asc')->get();
         return view('books.show', compact('book'),compact('comments'));
@@ -51,13 +58,14 @@ class booksController extends Controller
     //書籍情報のDBへの追加
     public function store(Request $request)
     {
-
+        
         $this->validate($request,[
             'title' => 'required|min:3',
             'body' => 'required',
             'eyecatch' => 'image|max:2000',
-            'deadline' => 'required|date',
         ]);
+        
+        
         
         Book::create($request->all());
 
@@ -77,11 +85,11 @@ class booksController extends Controller
     {
         $book = Book::findOrFail($id);
 
+
         $this->validate($request,[
             'title' => 'required|min:3',
-            'body' => 'required',
             'eyecatch' => 'image|max:2000',
-            'deadline' => 'required|date',
+            'deadline' => 'date',
         ]);
 
         $book->fill($request->all())->save();
@@ -104,4 +112,6 @@ class booksController extends Controller
         }
         return redirect('/');
     }
+    
+    
 }

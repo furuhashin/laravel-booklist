@@ -3,18 +3,18 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCommentsTable extends Migration
+class CreateAuthorsTable extends Migration
 {
     /**
-     * マイグレーション実行
+     * Run the migrations.
      *
      * @return void
      */
     public function up()
     {
-        Schema::create('comments', function (Blueprint $table) {
+            Schema::create('authors', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('body')->nullable();
+            $table->text('name')->nullable();
             $table->integer('book_id')->unsigned();
             $table->foreign('book_id')->references('id')->on('books');
             $table->integer('create_id')->unsigned();
@@ -23,20 +23,17 @@ class CreateCommentsTable extends Migration
             $table->timestamps();
         });
 
-        Schema::table('comments', function ($table) {
+        Schema::table('authors', function ($table) {
             $table->softDeletes();
-        });
-    }
-
-
+        });    }
 
     /**
-     * マイグレーションを戻す
+     * Reverse the migrations.
      *
      * @return void
      */
     public function down()
     {
-        Schema::drop('comments');
+        Schema::drop('authors');
     }
 }

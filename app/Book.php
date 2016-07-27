@@ -14,7 +14,7 @@ class Book extends Model implements StaplerableInterface
     use EloquentTrait;
     use SoftDeletes;
 
-    protected $fillable = array('title', 'body', 'status', 'deadline', 'create_id', 'eyecatch');
+    protected $fillable = array('title', 'body', 'status', 'deadline','borrow_id', 'create_id','update_id', 'eyecatch');
     
     //コンストラクタ
     public function __construct(array $attributes = array()) {
@@ -47,6 +47,7 @@ class Book extends Model implements StaplerableInterface
     public static function boot()
     {
         parent::boot();
+        //boot()がbootStaplerをoverrideしてしまうため、再定義
         static::bootStapler();
         // bookレコードを削除した際のイベントを登録
         static::deleted(function ($book) {
@@ -67,7 +68,7 @@ class Book extends Model implements StaplerableInterface
     }
 
     /**
-     * タスクリストのコメントを取得
+     * 書籍情報のコメントを取得
      */
     public function comments()
     {
@@ -75,7 +76,7 @@ class Book extends Model implements StaplerableInterface
     }
 
     /*
-     * このタスクを所有するユーザを取得
+     * この書籍情報を所有するユーザを取得
      */
     public function user()
     {

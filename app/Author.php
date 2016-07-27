@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
-class Comment extends Model
+class Author extends Model
 {
     use SoftDeletes;
 
@@ -16,10 +16,10 @@ class Comment extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
-    protected $fillable = array('body', 'book_id', 'create_id','update_id', 'eyecatch');
+    protected $fillable = array('name', 'book_id', 'create_id', 'update_id','eyecatch');
 
     /*
-     * このコメントを所有する書籍情報を取得
+     * この著者を所有する書籍情報を取得
      */
     public function book()
     {
@@ -27,10 +27,10 @@ class Comment extends Model
     }
 
     /*
-     * このコメントを所有する書籍情報を取得
+     * この著者を所有するユーザを取得
      */
     public function user()
     {
-        return $this->belongsTo('App\User','create_id');
+        return $this->belongsTo('App\User','update_id');
     }
 }
