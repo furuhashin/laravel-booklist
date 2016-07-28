@@ -35,7 +35,12 @@
                     <td width="100">
                     <td width="100">{{$book->status}}</td>
                     <td width="100">{{$book->name}}</td>
-                    <td width="100">{{ $book->deadline }}</td>
+                    @if(strtotime($book->deadline ) > strtotime((date('Y/m/d'))) or $book->deadline == "0000-00-00")
+                        <td width="100">{{ $book->deadline }}</td>
+                    @else
+                        {{--貸出期限内を過ぎた場合--}}
+                        <td width="100" style="background-color: #C20000">{{ $book->deadline }}</td>
+                    @endif
                     <td width="100">
                     {{--操作--}}
                     <div class="h-account">

@@ -20,7 +20,6 @@
     </div>
     <div class="form-group">
         {!! Form::label('author','著者:') !!}
-        {!! Form::text('author',$book->title,['class' => 'form-control']) !!}
     </div>
     <div class="form-group">
         {!! Form::label('body', '書籍詳細:') !!}

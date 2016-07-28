@@ -112,6 +112,4 @@ class booksController extends Controller
         }
         return redirect('/');
     }
-    
-    
 }

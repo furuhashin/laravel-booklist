@@ -1,4 +1,4 @@
-<?php
+    <?php
 
 return [
 
@@ -54,7 +54,7 @@ return [
     |
     */
 
-    'from' => ['address' => null, 'name' => null],
+    'from' => ['address' => 'yasai.saita@gmail.com', 'name' => 'MailMaster'],
 
     /*
     |--------------------------------------------------------------------------
