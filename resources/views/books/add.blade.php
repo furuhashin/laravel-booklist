@@ -34,7 +34,6 @@
             {!! Form::label('body', '書籍詳細:') !!}
             {!! Form::textarea('body', null, ['class' => 'form-control']) !!}
         </div>
-
         <div class="form-group">
             {!! Form::label('status','ステータス:') !!}
             {!! Form::select('status',['借りれます' => '借りれます','貸出中' => '貸出中','予約中' => '予約中'],'', ['class' => 'form-control']) !!}
@@ -50,6 +49,7 @@
             </div>
         </div>
         <div>
+            {!! Form::hidden('deadline', 0000-00-00) !!}
             {!! Form::hidden('create_id', Auth::user()->id) !!}
             {!! Form::hidden('update_id', Auth::user()->id) !!}
         </div>

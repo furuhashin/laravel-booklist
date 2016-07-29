@@ -25,10 +25,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('inspire')
-                ->everyMinute();
+        $filePath = storage_path() ."/logs/cron/SendEmails.txt";
 
-        $schedule->command('emails:send --force')
-                ->everyMinute();
+/*        $schedule->command('inspire')->hourly();*/
+
+        $schedule->command('emails:send')
+            ->dailyAt('12:00')->appendOutputTo($filePath);
     }
 }
