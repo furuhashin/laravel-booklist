@@ -10,6 +10,7 @@ use App\Http\Requests;
 use App\Book;
 
 
+
 class booksController extends Controller
 {
     public function __construct()
@@ -21,7 +22,8 @@ class booksController extends Controller
     public function index()
     {
         //usersテーブルのidカラム名とbooksテーブルのidカラム名が重複しているためselectを使用
-        //leftjoinするとアイキャッチが消えるため指定
+        //books.id as idにしないとなぜかアイキャッチが消えるため指定
+        //leftjoinするとアイキャッチが消えるためeyecatch_file_nameを指定
         $books = Book::leftjoin('users','books.borrow_id','=','users.id')
             ->select('books.id as id','title','body','status','deadline','borrow_id','create_id','update_id','eyecatch_file_name','name')->paginate(5);
         //book.indexにbooksという名前で$booksを渡している
@@ -95,7 +97,7 @@ class booksController extends Controller
         $book->fill($request->all())->save();
 
         \Session::flash('flash_message', '書籍情報の編集に成功しました!');
-        return redirect('/');
+        return back();
     }
 
     //既存書籍情報の削除
@@ -111,5 +113,26 @@ class booksController extends Controller
             \Session::flash('flash_message', '何か問題が生じ、書籍情報の削除が失敗しました! ');
         }
         return redirect('/');
+    }
+
+    //検索
+    public function search(){
+        $keyword = $_GET["keyword"];
+
+
+
+        if ($keyword) {
+
+            $books = Book::leftjoin('users','books.borrow_id','=','users.id')
+                ->where('title', 'LIKE', "%$keyword%")
+                ->select('books.id as id','title','body','status','deadline','borrow_id','create_id','update_id','eyecatch_file_name','name')
+                ->paginate(5);
+        }else{
+            //フラッシュメセージでリダイレクトかフォームに空白禁止のバリデーションをつける
+            $books = Book::paginate(5);
+        }
+
+
+        return view('books.index',compact('books'));
     }
 }

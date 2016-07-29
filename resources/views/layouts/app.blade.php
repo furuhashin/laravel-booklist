@@ -6,14 +6,13 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 </head>
 <body style="padding-top:50px;" role="document">
+@if(Auth::check())
 <!-- 共通ナビゲーション -->
-<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="/">Nob Books</a>
-        </div>
-    </div>
+<div class="navbar-fixed-top" role="navigation">
+    {{-- ナビゲーションバーの Partial を使用 --}}
+    @include('layouts.navbar')
 </div>
+@endif
 <div class="container">
     @yield('content')
 </div>

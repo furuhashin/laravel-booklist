@@ -2,11 +2,6 @@
     @section('content')
     <h1>
         書籍一覧
-        {!! link_to('books/create','書籍情報の新規作成',['class' => 'btn btn-primary']) !!}
-    <div class="pull-right">
-        こんにちは{{Auth::user()->name}}さん
-        {!! link_to('auth/logout','ログアウト',['class' => 'btn btn-danger']) !!}
-    </div>
     </h1>
 
     @if(Session::has('flash_message'))
@@ -46,7 +41,7 @@
                     <div class="h-account">
                     <ul>
                         {{--ステータスが借りれますの時のみ借りるボタンを表示--}}
-                        @if($book->status == '借りれます')
+                            @if($book->status == '借りれます')
                             {{--ステータスを貸出中に変更--}}
                         <li >{!! Form::open(['url' => '/books/update/'.$book->id]) !!}
                             {!! Form::hidden('title', $book->title, ['class' => 'form-control']) !!}
@@ -74,19 +69,22 @@
                             {!! Form::close() !!}
                         </li>
                         @endif
-                        <li><a href="{{url('books/edit',$book->id)}}" class="btn btn-primary">編集</a></li>
-                        <li><a href="{{url('books',$book->id)}}" class="btn btn-info">詳細 </a></li>
-                        {{--ログイン中のユーザーが作成した書籍情報に削除ボタンを表示--}}
-                        @if($book->create_id == Auth::user()->id)
-                        <li><a href="{{url('books/confirm',$book->id)}}" class="btn btn-danger">削除 </a></li>
-                        @endif
+                    <!-- ドロップダウンメニュー -->
+                        <li class="dropdown pull-left">
+                            <a href="#" class="dropdown-toggle btn btn-success" data-toggle="dropdown" role="button" aria-expanded="false">その他 <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="{{url('books/edit',$book->id)}}" class="btn btn-primary">編集</a></li>
+                                <li></li>
+                                <li><a href="{{url('books',$book->id)}}" class="btn btn-info">詳細 </a></li>
+                                {{--ログイン中のユーザーが作成した書籍情報に削除ボタンを表示--}}
+                                @if($book->create_id == Auth::user()->id)
+                                    <li><a href="{{url('books/confirm',$book->id)}}" class="btn btn-danger">削除 </a></li>
+                                @endif
+                            </ul>
+                        </li>
                     </ul>
                     </div>
                     </td>
-
-                   {{--
-                                        <td><div class="body">{{ str_limit($book->body, 300, $end = '...[If you show more, plese click title.]') }}</div></td>
-                    --}}
                 </tr>
             </table>
         </article>
