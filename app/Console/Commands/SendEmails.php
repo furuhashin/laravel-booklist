@@ -8,14 +8,14 @@ use App\Book;
 class SendEmails extends Command
 {
     /**
-     * The name and signature of the console command.
+     * コンソールコマンドの識別名
      *
      * @var string
      */
     protected $signature = 'emails:send';
 
     /**
-     * The console command description.
+     * コンソールコマンドの説明
      *
      * @var string
      */
@@ -32,7 +32,7 @@ class SendEmails extends Command
     }
 
     /**
-     * Execute the console command.
+     * コンソールコマンドの実行
      *
      * @return mixed
      */
@@ -44,6 +44,7 @@ class SendEmails extends Command
             //メールアドレスに紐付けられている貸出期限を過ぎている書籍を取得
             $books = Book::join('users','books.borrow_id','=','users.id')
                 ->where('deadline','<',date('Y/m/d'))->where('deadline', '!=', '0000-00-00')->where('email','=',$email)->get();
+            
             //貸出期限を過ぎている書籍を返却していないユーザをメールアドレスで検索して重複なしで取得
             $user = Book::join('users','books.borrow_id','=','users.id')
                 ->where('deadline','<',date('Y/m/d'))->where('deadline', '!=', '0000-00-00')->where('email','=',$email)->distinct()->firstOrFail();

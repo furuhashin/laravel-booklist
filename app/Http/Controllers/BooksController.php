@@ -25,8 +25,8 @@ class booksController extends Controller
         //books.id as idにしないとなぜかアイキャッチが消えるため指定
         //leftjoinするとアイキャッチが消えるためeyecatch_file_nameを指定
         $books = Book::leftjoin('users','books.borrow_id','=','users.id')
-            ->select('books.id as id','title','body','status','deadline','borrow_id','create_id','update_id','eyecatch_file_name','name')->paginate(5);
         //book.indexにbooksという名前で$booksを渡している
+            ->select('books.id as id','users.id as user_id','title','body','status','deadline','borrow_id','create_id','update_id','eyecatch_file_name','name')->paginate(5);
         return view('books.index', compact('books'));
     }
 
@@ -60,15 +60,11 @@ class booksController extends Controller
     //書籍情報のDBへの追加
     public function store(Request $request)
     {
-        
         $this->validate($request,[
             'title' => 'required|min:3',
             'body' => 'required',
             'eyecatch' => 'image|max:2000',
         ]);
-        
-        
-        
         Book::create($request->all());
 
         \Session::flash('flash_message', '書籍情報の追加に成功しました!');
@@ -87,7 +83,6 @@ class booksController extends Controller
     {
         $book = Book::findOrFail($id);
 
-
         $this->validate($request,[
             'title' => 'required|min:3',
             'eyecatch' => 'image|max:2000',
@@ -104,10 +99,8 @@ class booksController extends Controller
         public function delete($id)
     {
         if ($id && is_numeric($id)) {
-
             $books = Book::findOrFail($id);
             $books->delete();
-
             \Session::flash('flash_message', '書籍情報の削除が完了しました!');
         }else{
             \Session::flash('flash_message', '何か問題が生じ、書籍情報の削除が失敗しました! ');
@@ -116,13 +109,15 @@ class booksController extends Controller
     }
 
     //検索
-    public function search(){
-        $keyword = $_GET["keyword"];
+    public function search(Request $request)
+    {
+        $keyword = $request->input('keyword');
 
-
+        $this->validate($request,[
+            'keyword' => 'required',
+        ]);
 
         if ($keyword) {
-
             $books = Book::leftjoin('users','books.borrow_id','=','users.id')
                 ->where('title', 'LIKE', "%$keyword%")
                 ->select('books.id as id','title','body','status','deadline','borrow_id','create_id','update_id','eyecatch_file_name','name')
@@ -131,8 +126,6 @@ class booksController extends Controller
             //フラッシュメセージでリダイレクトかフォームに空白禁止のバリデーションをつける
             $books = Book::paginate(5);
         }
-
-
         return view('books.index',compact('books'));
     }
 }

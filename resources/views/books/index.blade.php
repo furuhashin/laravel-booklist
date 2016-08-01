@@ -1,8 +1,19 @@
 @extends('layouts.app')
+
     @section('content')
     <h1>
         書籍一覧
     </h1>
+
+    @if($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach($errors->all() as $error)
+                    <li>{{$error}}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
     @if(Session::has('flash_message'))
         <div class="alert alert-success">
@@ -29,7 +40,7 @@
                     <td width="200"><a href="{{url('books',$book->id)}}">{{$book->title}}</a></td>
                     <td width="100">
                     <td width="100">{{$book->status}}</td>
-                    <td width="100">{{$book->name}}</td>
+                    <td width="100"><a href="{{url('profiles',$book->user_id)}}">{{$book->name}}</a></td>
                     @if(strtotime($book->deadline ) > strtotime((date('Y/m/d'))) or $book->deadline == "0000-00-00")
                         <td width="100">{{ $book->deadline }}</td>
                     @else
@@ -43,7 +54,7 @@
                         {{--ステータスが借りれますの時のみ借りるボタンを表示--}}
                             @if($book->status == '借りれます')
                             {{--ステータスを貸出中に変更--}}
-                        <li >{!! Form::open(['url' => '/books/update/'.$book->id]) !!}
+                        <li>{!! Form::open(['url' => '/books/update/'.$book->id]) !!}
                             {!! Form::hidden('title', $book->title, ['class' => 'form-control']) !!}
                             {!! Form::hidden('body', $book->body, ['class' => 'form-control']) !!}
                             {!! Form::hidden('status', '貸出中', ['class' => 'form-control']) !!}

@@ -18,11 +18,12 @@
             <!-- 左寄せメニュー -->
             <ul class="nav navbar-nav">
                 <li><a href="">About</a></li>
+                {{--検索--}}
                 <li class="search navbar-form">
                     {!! Form::open(['method' => 'get','url' => "books",'files' => true]) !!}
-                {!! Form::input('search','keyword',null,['placeholder' => "タイトルで検索"]) !!}
-                {!! Form::submit('Search', array('class' => 'btn btn-primary')) !!}
-                {!! Form::close() !!}
+                    {!! Form::input('search','keyword',null,['placeholder' => "タイトルで検索"]) !!}
+                    {!! Form::submit('検索', array('class' => 'btn btn-primary')) !!}
+                    {!! Form::close() !!}
                 </li>
             </ul>
 
@@ -35,9 +36,9 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">ようこそ{{Auth::user()->name}}さん<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a href="#">Profile</a></li>
+                        <li><a href="{{url('profiles',Auth::user()->id)}}">プロフィール</a></li>
                         <li class="divider"></li>
-                        <li><a href="/auth/logout">Logout</a></li>
+                        <li><a href="/auth/logout">ログアウト</a></li>
                     </ul>
                 </li>
             </ul>

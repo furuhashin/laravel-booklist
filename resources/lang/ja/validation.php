@@ -20,5 +20,7 @@ return [
         'title' => 'タイトル',
         'body' => '本文',
         'deadline' => '期限',
+        'keyword' => 'キーワード',
+
     ],
 ];

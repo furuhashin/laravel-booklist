@@ -10,4 +10,3 @@
 <p>
     <a href="{{ ('http://laravel-tasklist/auth/login') }}">こちらからアクセス出来ます</a>
 </p>
-
