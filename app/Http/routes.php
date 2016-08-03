@@ -51,7 +51,7 @@ Route::post('/comments/update/{id}','CommentsController@update');
 //任意IDのコメント削除
 Route::post('/comments/delete/{id}','CommentsController@delete');
 
-//本情報検索結果表示画面
+//本情報検索結果表
 Route::get('/books', 'BooksController@search');
 
 //任意IDのユーザー情報表示

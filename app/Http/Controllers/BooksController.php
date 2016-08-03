@@ -26,7 +26,8 @@ class booksController extends Controller
         //leftjoinするとアイキャッチが消えるためeyecatch_file_nameを指定
         $books = Book::leftjoin('users','books.borrow_id','=','users.id')
         //book.indexにbooksという名前で$booksを渡している
-            ->select('books.id as id','users.id as user_id','title','body','status','deadline','borrow_id','create_id','update_id','eyecatch_file_name','name')->paginate(5);
+            ->select('books.id as id','users.id as user_id','title','body','status','deadline','borrow_id','create_id','update_id','eyecatch_file_name','name')
+            ->paginate(5);
         return view('books.index', compact('books'));
     }
 
@@ -36,7 +37,7 @@ class booksController extends Controller
         //usersテーブルのidカラム名とbooksテーブルのidカラム名が重複しているためselectを使用
         //leftjoinするとアイキャッチが消えるため指定
         $book = Book::leftjoin('users','books.borrow_id','=','users.id')
-            ->select('books.id as id','title','body','status','deadline','eyecatch_file_name','name')->findOrFail($id);
+            ->select('books.id as id','users.id as user_id','title','body','status','deadline','eyecatch_file_name','name')->findOrFail($id);
 
         //usersテーブルのidカラム名とcommentsテーブルのidカラム名が重複しているためselectを使用
         $comments = Book::find($id)->comments()->join('users','comments.create_id','=','users.id')
@@ -113,19 +114,28 @@ class booksController extends Controller
     {
         $keyword = $request->input('keyword');
 
+        $statuses = array("1" => "貸出中","借りれます");
+
         $this->validate($request,[
             'keyword' => 'required',
         ]);
-
-        if ($keyword) {
+        //ステータスをクリックした場合(フォームからの検索でも正常に動く)
+        if (array_search($keyword,$statuses)) {
+            $books = Book::leftjoin('users','books.borrow_id','=','users.id')
+                ->where('status', 'LIKE', "%$keyword%")
+                ->select('books.id as id','users.id as user_id','title','body','status','deadline','borrow_id','create_id','update_id','eyecatch_file_name','name')
+                ->paginate(5);
+        //フォームからの検索の場合
+        }elseif($keyword){
             $books = Book::leftjoin('users','books.borrow_id','=','users.id')
                 ->where('title', 'LIKE', "%$keyword%")
-                ->select('books.id as id','title','body','status','deadline','borrow_id','create_id','update_id','eyecatch_file_name','name')
+                ->select('books.id as id','users.id as user_id','title','body','status','deadline','borrow_id','create_id','update_id','eyecatch_file_name','name')
                 ->paginate(5);
+        //空白で検索した場合は全一覧とバリデーションNGのメッセージを表示
         }else{
-            //フラッシュメセージでリダイレクトかフォームに空白禁止のバリデーションをつける
             $books = Book::paginate(5);
         }
+
         return view('books.index',compact('books'));
     }
 }

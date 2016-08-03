@@ -31,7 +31,7 @@
                     <td width="120"><img src="{{$book->eyecatch->url('thumb')}}"></td>
                     <td width="200"><a href="{{url('books',$book->id)}}">{{$book->title}}</a></td>
                     <td width="100">
-                    <td width="100">{{$book->status}}</td>
+                    <td width="100"><a href="{{url('books?keyword='.$book->status)}}">{{$book->status}}</a></td>
                     @if(strtotime($book->deadline ) > strtotime((date('Y/m/d'))) or $book->deadline == "0000-00-00")
                         <td width="100">{{ $book->deadline }}</td>
                     @else
@@ -89,8 +89,12 @@
                     </td>
                 </tr>
             </table>
+
         </article>
     @endforeach
+    <div class="pull-left">
+        {!! link_to('/', '一覧へ戻る', ['class' => 'btn btn-info']) !!}
+    </div>
     {{-- ページネーションリンク --}}
     {!! $books->render() !!}
 @endsection

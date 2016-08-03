@@ -28,8 +28,8 @@
                     </td>
                     <td style="padding-left: 30px">
                     <p class="lead">タイトル： {{ $book->title }}</p>
-                    <p class="lead">ステータス：{{ $book->status }}</p>
-                    <p class="lead">借用者：{{ $book->name }}</p>
+                    <p class="lead">ステータス：<a href="{{url('books?keyword='.$book->status)}}">{{$book->status}}</a></p>
+                    <p class="lead">借用者：<a href="{{url('profiles',$book->user_id)}}">{{$book->name}}</a></p>
                     <p class="lead">貸出期限：{{ $book->deadline }}</p>
                     </td>
                 </tr>

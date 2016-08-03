@@ -39,7 +39,7 @@
                     <td width="120"><img src="{{$book->eyecatch->url('thumb')}}"></td>
                     <td width="200"><a href="{{url('books',$book->id)}}">{{$book->title}}</a></td>
                     <td width="100">
-                    <td width="100">{{$book->status}}</td>
+                    <td width="100"><a href="{{url('books?keyword='.$book->status)}}">{{$book->status}}</a></td>
                     <td width="100"><a href="{{url('profiles',$book->user_id)}}">{{$book->name}}</a></td>
                     @if(strtotime($book->deadline ) > strtotime((date('Y/m/d'))) or $book->deadline == "0000-00-00")
                         <td width="100">{{ $book->deadline }}</td>
