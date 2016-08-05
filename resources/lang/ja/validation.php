@@ -19,6 +19,7 @@ return [
     'attributes' => [
         'title' => 'タイトル',
         'body' => '本文',
+        'authors[]' => '著者',
         'deadline' => '期限',
         'keyword' => 'キーワード',
 

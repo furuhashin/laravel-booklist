@@ -8,6 +8,7 @@ use App\Http\Requests;
 
 //モデルの宣言
 use App\Book;
+use App\Author;
 
 
 
@@ -21,14 +22,22 @@ class booksController extends Controller
     //一覧の表示
     public function index()
     {
-        //usersテーブルのidカラム名とbooksテーブルのidカラム名が重複しているためselectを使用
-        //books.id as idにしないとなぜかアイキャッチが消えるため指定
+        //書籍の全一覧を取得するためleftjoinを使用(hasmany,belongstoだと制限される)
+        //重複カラム名にasで名前付けをするためにselectを使用
+        //books.id as idにしないとなぜかアイキャッチが消える
+        //borrow_idがないと返却ボタンが消える
         //leftjoinするとアイキャッチが消えるためeyecatch_file_nameを指定
+        //create_idは削除ボタンを表示するため
         $books = Book::leftjoin('users','books.borrow_id','=','users.id')
-        //book.indexにbooksという名前で$booksを渡している
-            ->select('books.id as id','users.id as user_id','title','body','status','deadline','borrow_id','create_id','update_id','eyecatch_file_name','name')
+            ->leftjoin('authors','books.id','=','authors.book_id')
+            ->select('books.id as id','users.id as user_id','title','body','status','deadline',
+                'borrow_id','books.create_id as create_id','eyecatch_file_name','users.name as name','authors.name as author_name')
+            ->distinct('id')
             ->paginate(5);
+
+        //book.indexにbooksという名前で$booksを渡している
         return view('books.index', compact('books'));
+
     }
 
     //書籍情報の表示
@@ -37,7 +46,10 @@ class booksController extends Controller
         //usersテーブルのidカラム名とbooksテーブルのidカラム名が重複しているためselectを使用
         //leftjoinするとアイキャッチが消えるため指定
         $book = Book::leftjoin('users','books.borrow_id','=','users.id')
-            ->select('books.id as id','users.id as user_id','title','body','status','deadline','eyecatch_file_name','name')->findOrFail($id);
+            ->leftjoin('authors','books.id','=','authors.book_id')
+            ->select('books.id as id','users.id as user_id','title','body','status','deadline',
+                'eyecatch_file_name','users.name as name','authors.name as author_name')
+            ->findOrFail($id);
 
         //usersテーブルのidカラム名とcommentsテーブルのidカラム名が重複しているためselectを使用
         $comments = Book::find($id)->comments()->join('users','comments.create_id','=','users.id')
@@ -66,7 +78,16 @@ class booksController extends Controller
             'body' => 'required',
             'eyecatch' => 'image|max:2000',
         ]);
-        Book::create($request->all());
+
+        $book = Book::create($request->all());
+
+        //著者は複数考えられるためforeachを使用
+        foreach ($request->authors as $author){
+            if ($author !== '') {
+                Author::create(["name" => "$author","book_id" => "$book->id",
+                    "create_id" => "$request->create_id","update_id" => "$request->update_id"]);
+            }
+        }
 
         \Session::flash('flash_message', '書籍情報の追加に成功しました!');
         return redirect('/');
@@ -75,8 +96,10 @@ class booksController extends Controller
     //書籍情報の編集
     public function edit($id)
     {
-        $book = Book::findOrFail($id);
-        return view('books.edit',compact('book'));
+        //重複カラム名がないのでselectを使用していない
+        $book = Book::leftjoin('authors','books.id','=','authors.book_id')->findOrFail($id);
+        
+        return view('books.edit',compact('book','id'));
     }
 
     //既存書籍情報の更新
@@ -93,7 +116,9 @@ class booksController extends Controller
         $book->fill($request->all())->save();
 
         \Session::flash('flash_message', '書籍情報の編集に成功しました!');
-        return back();
+        return redirect('/');
+        //このリターンバック何？
+        /*        return back();*/
     }
 
     //既存書籍情報の削除

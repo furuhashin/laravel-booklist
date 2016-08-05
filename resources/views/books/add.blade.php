@@ -20,16 +20,12 @@
         </div>
         <div class="form-group">
             {!! Form::label('author','著者1:') !!}
-            {!! Form::text('author',null,['class' => 'form-control']) !!}
-        </div>
-        {{--<div class="form-group">
-            {!! Form::label('author','著者2:') !!}
-            {!! Form::text('author[]',null,['class' => 'form-control']) !!}
+            {!! Form::text('authors[0]',null,['class' => 'form-control']) !!}
         </div>
         <div class="form-group">
-            {!! Form::label('author','著者3:') !!}
-            {!! Form::text('author[]',null,['class' => 'form-control']) !!}
-        </div>--}}
+            {!! Form::label('author','著者2:') !!}
+            {!! Form::text('authors[1]',null,['class' => 'form-control']) !!}
+        </div>
         <div class="form-group">
             {!! Form::label('body', '書籍詳細:') !!}
             {!! Form::textarea('body', null, ['class' => 'form-control']) !!}

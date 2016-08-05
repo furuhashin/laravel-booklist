@@ -13,13 +13,14 @@
         </div>
     @endif
 
-    {!! Form::open(['url' =>  "books/update/$book->id", 'files' => true]) !!}
+    {!! Form::open(['url' =>  "books/update/$id", 'files' => true]) !!}
     <div class="form-group">
         {!! Form::label('title','タイトル:') !!}
         {!! Form::text('title',$book->title,['class' => 'form-control']) !!}
     </div>
     <div class="form-group">
         {!! Form::label('author','著者:') !!}
+        {!! Form::text('body',$book->name, ['class' => 'form-control']) !!}
     </div>
     <div class="form-group">
         {!! Form::label('body', '書籍詳細:') !!}

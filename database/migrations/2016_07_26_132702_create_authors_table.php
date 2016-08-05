@@ -23,9 +23,24 @@ class CreateAuthorsTable extends Migration
             $table->timestamps();
         });
 
+        // 書籍と著者の中間テーブル
+        Schema::create('author_book', function(Blueprint $table) {
+            $table->integer('book_id')->unsigned()->index();
+            $table->foreign('book_id')->references('id')->on('books');
+            $table->integer('author_id')->unsigned()->index();
+            $table->foreign('author_id')->references('id')->on('authors');
+            $table->timestamps();
+        });
+
         Schema::table('authors', function ($table) {
             $table->softDeletes();
-        });    }
+        });
+
+        Schema::table('author_book', function ($table) {
+            $table->softDeletes();
+        });
+
+    }
 
     /**
      * マイグレーションを戻す
@@ -35,5 +50,7 @@ class CreateAuthorsTable extends Migration
     public function down()
     {
         Schema::drop('authors');
+        Schema::drop('author_book');
+
     }
 }

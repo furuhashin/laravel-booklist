@@ -13,8 +13,8 @@ class Book extends Model implements StaplerableInterface
     //Staplerの読み込み
     use EloquentTrait;
     use SoftDeletes;
-
-    protected $fillable = array('title', 'body', 'status', 'deadline','borrow_id', 'create_id','update_id', 'eyecatch');
+    //nemaはauthorテーブル
+    protected $fillable = array('title', 'body', 'status','name','deadline','borrow_id', 'create_id','update_id', 'eyecatch');
     
     //コンストラクタ
     public function __construct(array $attributes = array()) {
@@ -73,6 +73,14 @@ class Book extends Model implements StaplerableInterface
     public function comments()
     {
         return $this->hasMany('App\Comment');
+    }
+
+    /**
+     * 書籍の著者を取得
+     */
+    public function authors()
+    {
+        return $this->belongsToMany('App\Author');
     }
 
     /*

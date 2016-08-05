@@ -23,14 +23,15 @@ class Author extends Model
      */
     public function book()
     {
-        return $this->belongsTo('App\Book');
+        return $this->belongsToMany('App\Book');
     }
+
 
     /*
      * この著者を所有するユーザを取得
      */
     public function user()
     {
-        return $this->belongsTo('App\User','update_id');
+        return $this->belongsTo('App\User','create_id');
     }
 }
