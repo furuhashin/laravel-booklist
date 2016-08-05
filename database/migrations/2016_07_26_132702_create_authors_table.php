@@ -25,10 +25,10 @@ class CreateAuthorsTable extends Migration
 
         // 書籍と著者の中間テーブル
         Schema::create('author_book', function(Blueprint $table) {
-            $table->integer('book_id')->unsigned()->index();
-            $table->foreign('book_id')->references('id')->on('books');
             $table->integer('author_id')->unsigned()->index();
             $table->foreign('author_id')->references('id')->on('authors');
+            $table->integer('book_id')->unsigned()->index();
+            $table->foreign('book_id')->references('id')->on('books');
             $table->timestamps();
         });
 

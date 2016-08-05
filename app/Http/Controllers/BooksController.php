@@ -11,7 +11,6 @@ use App\Book;
 use App\Author;
 
 
-
 class booksController extends Controller
 {
     public function __construct()
@@ -32,7 +31,7 @@ class booksController extends Controller
             ->leftjoin('authors','books.id','=','authors.book_id')
             ->select('books.id as id','users.id as user_id','title','body','status','deadline',
                 'borrow_id','books.create_id as create_id','eyecatch_file_name','users.name as name','authors.name as author_name')
-            ->distinct('id')
+            ->groupBy('title')
             ->paginate(5);
 
         //book.indexにbooksという名前で$booksを渡している
@@ -54,7 +53,10 @@ class booksController extends Controller
         //usersテーブルのidカラム名とcommentsテーブルのidカラム名が重複しているためselectを使用
         $comments = Book::find($id)->comments()->join('users','comments.create_id','=','users.id')
             ->select('comments.id as id','comments.create_id as create_id','comments.updated_at as updated_at','body','name')->orderby('comments.id','asc')->get();
-        return view('books.show', compact('book'),compact('comments'));
+
+        $authors = Author::where("book_id","=","$id")->get();
+        
+        return view('books.show', compact('book','comments','authors'));
     }
 
     //確認画面の表示
@@ -88,7 +90,7 @@ class booksController extends Controller
                     "create_id" => "$request->create_id","update_id" => "$request->update_id"]);
             }
         }
-
+        
         \Session::flash('flash_message', '書籍情報の追加に成功しました!');
         return redirect('/');
     }
@@ -98,8 +100,9 @@ class booksController extends Controller
     {
         //重複カラム名がないのでselectを使用していない
         $book = Book::leftjoin('authors','books.id','=','authors.book_id')->findOrFail($id);
+        $authors = Author::where("book_id","=","$id")->get();
         
-        return view('books.edit',compact('book','id'));
+        return view('books.edit',compact('book','id','authors'));
     }
 
     //既存書籍情報の更新
@@ -112,13 +115,31 @@ class booksController extends Controller
             'eyecatch' => 'image|max:2000',
             'deadline' => 'date',
         ]);
-
+        
+        if($request->btn == 1){
         $book->fill($request->all())->save();
+        }
+        else{
+            $arr = array("title" => "$request->title", "body" => $request->body, "deadline" => $request->deadline,
+                "status" => $request->status,"eyecatch" => "$request->eyecatch");
+    
+            $book->fill($arr)->save();
+
+            //著者は複数考えられるためforeachを使用
+            foreach ($request->authors as $author_id => $author_name){
+                $author = Author::findOrFail($author_id);
+                if ($author == true && $author_name == true) {
+                    $new_name = array("name" => $author_name);
+                    $author->fill($new_name)->save();
+                }elseif ($author_name == ''){
+                    $author->delete();
+                }
+            }
+        }
+
 
         \Session::flash('flash_message', '書籍情報の編集に成功しました!');
         return redirect('/');
-        //このリターンバック何？
-        /*        return back();*/
     }
 
     //既存書籍情報の削除

@@ -61,6 +61,7 @@
                             {!! Form::hidden('deadline', date('Y/m/d', strtotime('1 week')), ['class' => 'form-control']) !!}
                             {!! Form::hidden('borrow_id', Auth::user()->id, ['class' => 'form-control']) !!}
                             {!! Form::hidden('update_id', Auth::user()->id, ['class' => 'form-control']) !!}
+                            {!! Form::hidden('btn', 1, ['class' => 'form-control']) !!}
                             {!! Form::submit('借りる', ['class' => 'btn btn-primary']) !!}
                             {!! Form::close() !!}
                         </li>
@@ -76,6 +77,7 @@
                             {!! Form::hidden('deadline', "", ['class' => 'form-control']) !!}
                             {!! Form::hidden('borrow_id', null, ['class' => 'form-control']) !!}
                             {!! Form::hidden('update_id', Auth::user()->id, ['class' => 'form-control']) !!}
+                            {!! Form::hidden('btn', 1, ['class' => 'form-control']) !!}
                             {!! Form::submit('返却 ', ['class' => 'btn btn-primary']) !!}
                             {!! Form::close() !!}
                         </li>

@@ -20,7 +20,9 @@
     </div>
     <div class="form-group">
         {!! Form::label('author','著者:') !!}
-        {!! Form::text('body',$book->name, ['class' => 'form-control']) !!}
+            @foreach($authors as $author)
+        {!! Form::text("authors[$author->id]",$author->name, ['class' => 'form-control']) !!}
+        @endforeach
     </div>
     <div class="form-group">
         {!! Form::label('body', '書籍詳細:') !!}
