@@ -81,6 +81,7 @@ class booksController extends Controller
             'eyecatch' => 'image|max:2000',
         ]);
 
+        //ここで$request->authorsを引数に加えてあたらDBに何が入るのか？（authorsは配列、多分エラーが返る）
         $book = Book::create($request->all());
 
         //著者は複数考えられるためforeachを使用
@@ -98,10 +99,12 @@ class booksController extends Controller
     //書籍情報の編集
     public function edit($id)
     {
-        //重複カラム名がないのでselectを使用していない
-        $book = Book::leftjoin('authors','books.id','=','authors.book_id')->findOrFail($id);
+        $book = Book::leftjoin('authors','books.id','=','authors.book_id')
+            ->select('books.id as id','title','body','status','deadline', 'eyecatch_file_name')
+            ->findOrFail($id);
+        //多対多のリレーションで$book->hasmany()で一気にとれるかも
         $authors = Author::where("book_id","=","$id")->get();
-        
+
         return view('books.edit',compact('book','id','authors'));
     }
 
@@ -115,16 +118,13 @@ class booksController extends Controller
             'eyecatch' => 'image|max:2000',
             'deadline' => 'date',
         ]);
-        
+
+        //借りる、返却ボタンが押されたの判定
         if($request->btn == 1){
-        $book->fill($request->all())->save();
+            $book->fill($request->all())->save();
         }
         else{
-            $arr = array("title" => "$request->title", "body" => $request->body, "deadline" => $request->deadline,
-                "status" => $request->status,"eyecatch" => "$request->eyecatch");
-    
-            $book->fill($arr)->save();
-
+            $book->fill($request->all())->save();
             //著者は複数考えられるためforeachを使用
             foreach ($request->authors as $author_id => $author_name){
                 $author = Author::findOrFail($author_id);
@@ -136,8 +136,6 @@ class booksController extends Controller
                 }
             }
         }
-
-
         \Session::flash('flash_message', '書籍情報の編集に成功しました!');
         return redirect('/');
     }
