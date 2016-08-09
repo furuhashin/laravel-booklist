@@ -81,8 +81,16 @@ class booksController extends Controller
             'eyecatch' => 'image|max:2000',
         ]);
 
-        //ここで$request->authorsを引数に加えてあたらDBに何が入るのか？（authorsは配列、多分エラーが返る）
         $book = Book::create($request->all());
+
+        //DBに追加したテーブルを取得
+        /*$book_row = Book::findOrFail($book->id);*/
+        //書籍に紐づく著者をDBから配列で取得し、フィルでアップデートする
+        /*
+        $arr = array("author" => implode(",",$request->authors));
+        $book_row->fill($arr)->save();*/
+
+
 
         //著者は複数考えられるためforeachを使用
         foreach ($request->authors as $author){
@@ -102,10 +110,18 @@ class booksController extends Controller
         $book = Book::leftjoin('authors','books.id','=','authors.book_id')
             ->select('books.id as id','title','body','status','deadline', 'eyecatch_file_name')
             ->findOrFail($id);
+
         //多対多のリレーションで$book->hasmany()で一気にとれるかも
         $authors = Author::where("book_id","=","$id")->get();
+        $books = Book::find($id)->authors;
+        foreach ($books as $a){
+            var_dump($a);
+        }
 
-        return view('books.edit',compact('book','id','authors'));
+
+
+
+        /*return view('books.edit',compact('book','id','authors'));*/
     }
 
     //既存書籍情報の更新

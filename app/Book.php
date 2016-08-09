@@ -13,8 +13,8 @@ class Book extends Model implements StaplerableInterface
     //Staplerの読み込み
     use EloquentTrait;
     use SoftDeletes;
-    //nemaはauthorテーブル
-    protected $fillable = array('title', 'body', 'status','name','deadline','borrow_id', 'create_id','update_id', 'eyecatch');
+    
+    protected $fillable = array('title', 'body', 'status','deadline','borrow_id', 'create_id','update_id', 'eyecatch');
     
     //コンストラクタ
     public function __construct(array $attributes = array()) {

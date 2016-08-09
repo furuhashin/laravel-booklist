@@ -21,7 +21,7 @@ class Author extends Model
     /*
      * この著者を所有する書籍情報を取得
      */
-    public function book()
+    public function books()
     {
         return $this->belongsToMany('App\Book');
     }

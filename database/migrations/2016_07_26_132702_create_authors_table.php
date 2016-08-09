@@ -25,9 +25,9 @@ class CreateAuthorsTable extends Migration
 
         // 書籍と著者の中間テーブル
         Schema::create('author_book', function(Blueprint $table) {
-            $table->integer('author_id')->unsigned()->index();
+            $table->integer('author_id')->unsigned();
             $table->foreign('author_id')->references('id')->on('authors');
-            $table->integer('book_id')->unsigned()->index();
+            $table->integer('book_id')->unsigned();
             $table->foreign('book_id')->references('id')->on('books');
             $table->timestamps();
         });
@@ -49,8 +49,9 @@ class CreateAuthorsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('authors');
         Schema::drop('author_book');
+        Schema::drop('authors');
+
 
     }
 }
