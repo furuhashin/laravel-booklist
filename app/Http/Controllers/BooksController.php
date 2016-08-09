@@ -34,9 +34,13 @@ class booksController extends Controller
                 'borrow_id','books.create_id as create_id','eyecatch_file_name','users.name as name','authors.name as author_name')
             ->groupBy('title')
             ->paginate(5);
-
-        //book.indexにbooksという名前で$booksを渡している
-        return view('books.index', compact('books'));
+        
+        //取得した書籍一覧のレコードのidをキーにして、その書籍に紐づく著者を配列に格納
+        foreach ($books as $book){
+            $authors[$book->id] = Book::find($book->id)->authors;
+        }
+        //book.indexにbooksというキーで$booksを渡している
+        return view('books.index', compact('books','authors'));
 
     }
 
