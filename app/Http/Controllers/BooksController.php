@@ -187,7 +187,13 @@ class booksController extends Controller
                     'books.create_id as create_id','eyecatch_file_name','users.name as name','authors.name as author_name')
                 ->groupBy('title')
                 ->paginate(5);
-        //フォームからの検索の場合
+
+            //取得した書籍一覧のレコードのidをキーにして、その書籍に紐づく著者を配列に格納
+            foreach ($books as $book){
+                $authors[$book->id] = Book::find($book->id)->authors;
+            }
+            $message = "以下の書籍は現在".$keyword;
+            //フォームからの検索の場合
         }elseif($keyword){
             $books = Book::leftjoin('users','books.borrow_id','=','users.id')
                 ->leftjoin('author_book','books.id','=','author_book.book_id')
@@ -197,11 +203,15 @@ class booksController extends Controller
                     'books.create_id as create_id','eyecatch_file_name','users.name as name','authors.name as author_name')
                 ->groupBy('title')
                 ->paginate(5);
+
+            //取得した書籍一覧のレコードのidをキーにして、その書籍に紐づく著者を配列に格納
+            foreach ($books as $book){
+                $authors[$book->id] = Book::find($book->id)->authors;
+            }
         //空白で検索した場合は全一覧とバリデーションNGのメッセージを表示
         }else{
             $books = Book::paginate(5);
         }
-
-        return view('books.index',compact('books'));
+        return view('books.index',compact('books','authors','message'));
     }
 }

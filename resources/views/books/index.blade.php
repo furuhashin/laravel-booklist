@@ -21,6 +21,13 @@
         </div>
     @endif
 
+    {{--ステータスを押下した時に貸出中等のメッセージを表示--}}
+    @if(isset($message))
+        <div class="alert alert-success">
+            {{ $message}}
+        </div>
+    @endif
+
     @foreach($books as $book)
         <article>
             <table class="table table-bordered">
