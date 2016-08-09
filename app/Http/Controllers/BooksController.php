@@ -28,7 +28,8 @@ class booksController extends Controller
         //leftjoinするとアイキャッチが消えるためeyecatch_file_nameを指定
         //create_idは削除ボタンを表示するため
         $books = Book::leftjoin('users','books.borrow_id','=','users.id')
-            ->leftjoin('authors','books.id','=','authors.book_id')
+            ->leftjoin('author_book','books.id','=','author_book.book_id')
+            ->leftjoin('authors','author_book.author_id','=','authors.id')
             ->select('books.id as id','users.id as user_id','title','body','status','deadline',
                 'borrow_id','books.create_id as create_id','eyecatch_file_name','users.name as name','authors.name as author_name')
             ->groupBy('title')
@@ -45,17 +46,16 @@ class booksController extends Controller
         //usersテーブルのidカラム名とbooksテーブルのidカラム名が重複しているためselectを使用
         //leftjoinするとアイキャッチが消えるため指定
         $book = Book::leftjoin('users','books.borrow_id','=','users.id')
-            ->leftjoin('authors','books.id','=','authors.book_id')
+            ->leftjoin('author_book','books.id','=','author_book.book_id')
+            ->leftjoin('authors','author_book.author_id','=','authors.id')
             ->select('books.id as id','users.id as user_id','title','body','status','deadline',
                 'eyecatch_file_name','users.name as name','authors.name as author_name')
             ->findOrFail($id);
+        //書籍に紐づくコメントを取得
+        $comments = Book::find($id)->comments;
+        //書籍に紐づく著者を取得
+        $authors = Book::find($id)->authors;
 
-        //usersテーブルのidカラム名とcommentsテーブルのidカラム名が重複しているためselectを使用
-        $comments = Book::find($id)->comments()->join('users','comments.create_id','=','users.id')
-            ->select('comments.id as id','comments.create_id as create_id','comments.updated_at as updated_at','body','name')->orderby('comments.id','asc')->get();
-
-        $authors = Author::where("book_id","=","$id")->get();
-        
         return view('books.show', compact('book','comments','authors'));
     }
 
@@ -90,16 +90,16 @@ class booksController extends Controller
         $arr = array("author" => implode(",",$request->authors));
         $book_row->fill($arr)->save();*/
 
-
-
         //著者は複数考えられるためforeachを使用
         foreach ($request->authors as $author){
             if ($author !== '') {
-                Author::create(["name" => "$author","book_id" => "$book->id",
+                $author_id = Author::create(["name" => "$author",
                     "create_id" => "$request->create_id","update_id" => "$request->update_id"]);
+                //中間テーブルに書籍idと著者idをひも付ける
+                $book->authors()->attach($author_id);
             }
         }
-        
+
         \Session::flash('flash_message', '書籍情報の追加に成功しました!');
         return redirect('/');
     }
@@ -107,21 +107,15 @@ class booksController extends Controller
     //書籍情報の編集
     public function edit($id)
     {
-        $book = Book::leftjoin('authors','books.id','=','authors.book_id')
+        $book = Book::leftjoin('author_book','books.id','=','author_book.book_id')
+            ->leftjoin('authors','author_book.author_id','=','authors.id')
             ->select('books.id as id','title','body','status','deadline', 'eyecatch_file_name')
             ->findOrFail($id);
 
-        //多対多のリレーションで$book->hasmany()で一気にとれるかも
-        $authors = Author::where("book_id","=","$id")->get();
-        $books = Book::find($id)->authors;
-        foreach ($books as $a){
-            var_dump($a);
-        }
+        //取得したレコードに紐づく著者を取得
+        $authors = $book->authors;
 
-
-
-
-        /*return view('books.edit',compact('book','id','authors'));*/
+        return view('books.edit',compact('book','id','authors'));
     }
 
     //既存書籍情報の更新
@@ -182,14 +176,22 @@ class booksController extends Controller
         //ステータスをクリックした場合(フォームからの検索でも正常に動く)
         if (array_search($keyword,$statuses)) {
             $books = Book::leftjoin('users','books.borrow_id','=','users.id')
+                ->leftjoin('author_book','books.id','=','author_book.book_id')
+                ->leftjoin('authors','author_book.author_id','=','authors.id')
                 ->where('status', 'LIKE', "%$keyword%")
-                ->select('books.id as id','users.id as user_id','title','body','status','deadline','borrow_id','create_id','update_id','eyecatch_file_name','name')
+                ->select('books.id as id','users.id as user_id','title','body','status','deadline','borrow_id',
+                    'books.create_id as create_id','eyecatch_file_name','users.name as name','authors.name as author_name')
+                ->groupBy('title')
                 ->paginate(5);
         //フォームからの検索の場合
         }elseif($keyword){
             $books = Book::leftjoin('users','books.borrow_id','=','users.id')
+                ->leftjoin('author_book','books.id','=','author_book.book_id')
+                ->leftjoin('authors','author_book.author_id','=','authors.id')
                 ->where('title', 'LIKE', "%$keyword%")
-                ->select('books.id as id','users.id as user_id','title','body','status','deadline','borrow_id','create_id','update_id','eyecatch_file_name','name')
+                ->select('books.id as id','users.id as user_id','title','body','status','deadline','borrow_id',
+                    'books.create_id as create_id','eyecatch_file_name','users.name as name','authors.name as author_name')
+                ->groupBy('title')
                 ->paginate(5);
         //空白で検索した場合は全一覧とバリデーションNGのメッセージを表示
         }else{

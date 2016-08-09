@@ -80,7 +80,7 @@ class Book extends Model implements StaplerableInterface
      */
     public function authors()
     {
-        return $this->belongsToMany('App\Author');
+        return $this->belongsToMany('App\Author')->withTimestamps();
     }
 
     /*
